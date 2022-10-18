@@ -9,6 +9,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
+import Membership from './pages/Membership';
+import Games from './pages/Games';
+import Referral from './pages/Referrals';
 
 // ----------------------------------------------------------------------
 
@@ -22,6 +25,9 @@ export default function Router() {
         { path: 'user', element: <User /> },
         { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> },
+        { path: 'membership', element: <Membership /> },
+        { path: 'games', element: <Games /> },
+        { path: 'referrals', element: <Referral /> },
       ],
     },
     {
