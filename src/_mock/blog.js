@@ -13,7 +13,7 @@ const POST_TITLES = [
   'Simple, Great Looking Animations in Your Project | Video Tutorial',
 ];
 
-const posts = [...Array(7)].map((_, index) => ({
+const posts = [...Array(4)].map((_, index) => ({
   id: faker.datatype.uuid(),
   cover: `/static/mock-images/covers/cover_${index + 1}.jpg`,
   title: POST_TITLES[index + 1],
