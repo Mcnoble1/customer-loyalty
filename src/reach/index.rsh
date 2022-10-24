@@ -6,55 +6,199 @@
 
 'reach 0.1';
 
-const Enroll = Object({
-  firstName: Bytes(64),
-  lastName: Bytes(64),
-});
+const platformToken = Token;
+
+// const Enroll = Object({
+//   firstName: Bytes(64),
+//   lastName: Bytes(64),
+// });
+// let tokenBalance = 0;
+const enrollmentPoints = 10000;
+const referralPoints = 50000;
+const anniversaryPoints = 10;
+const goldMembership = 1000;
+const silverMembership = 500;
+const bronzeMembership = 250;
+const vipMembership = 1000;
+const playGame = 5;
+const winGame = 20;
+const readTutorial = 10000;
+const answerQuiz = 20000;
+const checkinPoints = 5;
 
 export const main = Reach.App(() => {
-  const Deployer = Participant('Deployer', {
+  setOptions({ autoTrackPublishedTokens: false });
+
+  const Admin = Participant('Admin', {
     // Specify Alice's interact interface here
-    seeUser: Fun([Address], Null),
+    getToken: platformToken,
     createProgram: Fun([], Null),
+    seeUser: Fun([Bytes(64), Address], Null),
+    seeBlog: Fun([Bytes(64), Address], Null),
+
+    seeMembership: Fun([Address], Null),
+    // points: UInt,
   });
   const User = Participant('User', {
     // Specify Bob's interact interface here
-    enroll: Fun([Bytes(64), Bytes(64)], Null),
+    enroll: Fun(
+      [],
+      Object({
+        firstName: Bytes(64),
+        lastName: Bytes(64),
+      })
+    ),
     readBlog: Fun([], Null),
-    writeBlog: Fun([Bytes(64)], Null),
-    answerQuestion: Fun([Bytes(64)], Null),
-    submitQuestion: Fun([Bytes(64)], Null),
-    referFriend: Fun([Address], Null),
+    answerQuestion: Fun([], Bytes(64)),
+    referFriend: Fun(
+      [],
+      Object({
+        friendName: Bytes(64),
+        // account: Address,
+      })
+    ),
     playGame: Fun([], Null),
-    redeemPoints: Fun([], Null),
+    buyNFT: Fun([], Null),
+    upgradeToGold: Fun([], Null),
+    upgradeToSilver: Fun([], Null),
+    upgradeToBronze: Fun([], Null),
+    upgradeToVIP: Fun([], Null),
     swapPoints: Fun([UInt], Null),
     checkin: Fun([], Null),
     seeAnniversary: Fun([], Null),
   });
-
   const Info = View('Info', {
-    details: Enroll,
+    details: platformToken,
   });
 
   init();
 
-  User.only(() => {
-    const { firstName, lastName } = declassify(interact.enroll);
+  Admin.only(() => {
+    const token = declassify(interact.getToken);
   });
   // The first one to publish deploys the contract
-  User.publish(firstName, lastName);
+  Admin.publish(token);
+  // const { token } = tokenId;
+  Token.track(token);
+  Info.details.set(token);
 
+  const tokenAmount = 500000;
   commit();
+  Admin.pay([[tokenAmount, token]]); // pay the token into the contract
+
+  assert(balance(token) == tokenAmount, 'balance of token points is wrong');
 
   // The second one to publish always attaches
 
-  Deployer.only(() => {
-    const seeUser = declassify(interact.seeUser(User));
+  User.only(() => {
+    const { firstName, lastName } = declassify(interact.enroll());
   });
-  Deployer.publish(seeUser);
+  commit();
+  User.publish(firstName, lastName);
+
+  Admin.only(() => {
+    interact.seeUser(firstName, User);
+  });
+  transfer(enrollmentPoints, token).to(User);
+  // token.burn(enrollmentPoints);
+
+  User.only(() => {
+    const { friendName } = declassify(interact.referFriend());
+  });
+  commit();
+  User.publish(friendName);
+
+  transfer(referralPoints, token).to(User);
+  // transfer(referralPoints, token).to(ownAccount);
+  // token.burn(2 * referralPoints);
+
+  User.only(() => {
+    interact.readBlog();
+  });
+  commit();
+  User.publish();
+
+  Admin.only(() => {
+    interact.seeBlog(firstName, User);
+  });
+
+  transfer(readTutorial, token).to(User);
+  // token.burn(readTutorial);
+
+  // User.only(() => {
+  //   const answer = declassify(interact.answerQuestion());
+  // });
+  // commit();
+  // User.publish(answer);
+
+  // transfer(answerQuiz, token).to(User);
+  // token.burn(answerQuiz);
+
+  // User.only(() => {
+  //   interact.playGame();
+  // });
+  // commit();
+  // User.publish();
+
+  // transfer(playGame, token).to(User);
+  // token.burn(playGame);
+
+  // User.only(() => {
+  //   const bronze = declassify(interact.upgradeToBronze());
+  // });
+  // commit();
+  // User.pay(bronzeMembership);
+
+  // User.only(() => {
+  //   const silver = declassify(interact.upgradeToSilver());
+  // });
+  // commit();
+  // User.pay(silverMembership);
+
+  // User.only(() => {
+  //   const gold = declassify(interact.upgradeToGold());
+  // });
+  // commit();
+  // User.pay(goldMembership);
+
+  // User.only(() => {
+  //   const vip = declassify(interact.upgradeToVIP());
+  // });
+  // commit();
+  // User.pay(vipMembership);
+
+  // User.only(() => {
+  //   const point = declassify(interact.swapPoints(points));
+  // });
+  // Admin.publish(points);
+
+  // transfer(points).to(User);
+
+  // User.only(() => {
+  //   const checkin = declassify(interact.checkin());
+  // });
+  // commit();
+  // User.publish(checkin);
+
+  // transfer(checkinPoints, token).to(User);
+  // token.burn(checkinPoints);
+
+  // User.only(() => {
+  //   const anniversary = declassify(interact.seeAnniversary());
+  // });
+  // commit();
+  // User.publish(anniversary);
+
+  // transfer(anniversaryPoints, token).to(User);
+  // token.burn(anniversaryPoints);
+
+  // Admin.interact.seeMembership(User);
+
+  transfer(balance(token), token).to(Admin);
+  transfer(balance()).to(Admin);
 
   commit();
-  // write your program here
+
   exit();
 });
 
