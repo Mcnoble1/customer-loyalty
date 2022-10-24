@@ -102,11 +102,11 @@ console.log('Starting backends...');
 
     // const bal = await balOf(acc, tokenParams);
     // console.log(bal.toString());
-    console.log(acc);
+
     return enrollmentParams;
   }),
   (interact.seeUser = async (name, who) => {
-    console.log(`Admin saw that ${name} with the address ${stdlib.formatAddress(who)} has enrolled`);
+    console.log(`${name} with the address ${stdlib.formatAddress(who)} has enrolled`);
   }),
   (interact.referFriend = async () => {
     const friendName = await ask.ask("Enter your friend's name", (x) => x);
@@ -114,23 +114,79 @@ console.log('Starting backends...');
     const friendParams = { friendName };
     console.log(`You have referred your friend ${friendName} to the Loyalty Program.`);
     // console.log(await acc.balanceOf());
-    console.log(await stdlib.balancesOf(acc, [null, tokenParams]));
+    // console.log(await stdlib.balancesOf(acc, [null, tokenParams]));
 
     return friendParams;
+  }),
+  (interact.seeReferral = async (name, who) => {
+    console.log(`${name} with the address ${stdlib.formatAddress(who)} referred a friend`);
   }),
   (interact.readBlog = async () => {
     console.log(`You have read the blog post.`);
   }),
-  (interact.seeBlog = async (name, who) => {
+  (interact.seeRead = async (name, who) => {
     console.log(`Admin saw that ${name} with the address ${stdlib.formatAddress(who)} has read the blog post`);
   });
-// (interact.answerQuestion = async () => {
-//   console.log(`You have answered the question.`);
-//   return 'Yes';
-// });
-// (interact.seeAnswer = (who) => {
-//   console.log(`Admin saw that with the address ${stdlib.formatAddress(who)} has answered the question`);
-// });
+interact.answerQuestion = async () => {
+  console.log(`You have answered the question.`);
+  return 'Yes';
+};
+interact.seeAnswer = (name, who) => {
+  console.log(`${name} wit the address ${stdlib.formatAddress(who)} has answered the question`);
+};
+interact.seePlay = (name, who) => {
+  console.log(`${name} with the address ${stdlib.formatAddress(who)} has played the game`);
+};
+interact.upgradeToBronze = async () => {
+  const choice = await ask.ask(`Would you like to upgrade to Bronze membership? [costs 250 tokens] (y/n)`, ask.yesno);
+  if (!choice) {
+    console.log(`You are maintaining your membership`);
+  } else {
+    console.log(`You are now a Bronze Member`);
+  }
+};
+interact.seeBronzeUpgrade = (name, who) => {
+  console.log(`${name} with the address ${stdlib.formatAddress(who)} has upgraded to Bronze`);
+};
+interact.upgradeToSilver = async () => {
+  const choice = await ask.ask(`Would you like to upgrade to Silver membership? [costs 500 tokens] (y/n)`, ask.yesno);
+  if (!choice) {
+    console.log(`You are maintaining your membership`);
+  } else {
+    console.log(`You are now a Silver Member`);
+  }
+};
+interact.seeSilverUpgrade = (name, who) => {
+  console.log(`${name} with the address ${stdlib.formatAddress(who)} has upgraded to Silver`);
+};
+interact.upgradeToGold = async () => {
+  const choice = await ask.ask(`Would you like to upgrade to Gold membership? [costs 1000 tokens] (y/n)`, ask.yesno);
+  if (!choice) {
+    console.log(`You are maintaining your membership`);
+  } else {
+    console.log(`You are now a Gold Member`);
+  }
+};
+interact.seeGoldUpgrade = (name, who) => {
+  console.log(`${name} with the address ${stdlib.formatAddress(who)} has upgraded to Gold`);
+};
+interact.upgradeToVIP = async () => {
+  const choice = await ask.ask(`Would you like to upgrade to VIP membership? [costs 2000 tokens] (y/n)`, ask.yesno);
+  if (!choice) {
+    console.log(`You are maintaining your membership`);
+  } else {
+    console.log(`You are now a VIP Member`);
+  }
+};
+interact.seeVipUpgrade = (name, who) => {
+  console.log(`${name} with the address ${stdlib.formatAddress(who)} has upgraded to VIP`);
+};
+interact.playGame = async () => {
+  const choice = await ask.ask(`Would you like to play the game? (y/n)`, ask.yesno);
+  if (choice) {
+    console.log(`You have played the game.`);
+  }
+};
 
 // implement User's interact object here
 

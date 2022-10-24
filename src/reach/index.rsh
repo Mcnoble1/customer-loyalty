@@ -16,11 +16,11 @@ const platformToken = Token;
 const enrollmentPoints = 10000;
 const referralPoints = 50000;
 const anniversaryPoints = 10;
-const goldMembership = 1000;
-const silverMembership = 500;
-const bronzeMembership = 250;
-const vipMembership = 1000;
-const playGame = 5;
+const goldMembership = 10000;
+const silverMembership = 5000;
+const bronzeMembership = 2500;
+const vipMembership = 20000;
+const playGame = 5000;
 const winGame = 20;
 const readTutorial = 10000;
 const answerQuiz = 20000;
@@ -34,10 +34,18 @@ export const main = Reach.App(() => {
     getToken: platformToken,
     createProgram: Fun([], Null),
     seeUser: Fun([Bytes(64), Address], Null),
-    seeBlog: Fun([Bytes(64), Address], Null),
-
-    seeMembership: Fun([Address], Null),
-    // points: UInt,
+    seeReferral: Fun([Bytes(64), Address], Null),
+    seeAnniversary: Fun([Bytes(64), Address], Null),
+    seeAnswer: Fun([Bytes(64), Address], Null),
+    seeCheckin: Fun([Bytes(64), Address], Null),
+    seePlay: Fun([Bytes(64), Address], Null),
+    seeWinner: Fun([Bytes(64), Address], Null),
+    seeRead: Fun([Bytes(64), Address], Null),
+    seeBronzeUpgrade: Fun([Bytes(64), Address], Null),
+    seeSilverUpgrade: Fun([Bytes(64), Address], Null),
+    seeGoldUpgrade: Fun([Bytes(64), Address], Null),
+    seeVipUpgrade: Fun([Bytes(64), Address], Null),
+    seePurchase: Fun([Bytes(64), Address], Null),
   });
   const User = Participant('User', {
     // Specify Bob's interact interface here
@@ -108,6 +116,8 @@ export const main = Reach.App(() => {
   commit();
   User.publish(friendName);
 
+  Admin.interact.seeReferral(firstName, User);
+
   transfer(referralPoints, token).to(User);
   // transfer(referralPoints, token).to(ownAccount);
   // token.burn(2 * referralPoints);
@@ -118,54 +128,64 @@ export const main = Reach.App(() => {
   commit();
   User.publish();
 
-  Admin.only(() => {
-    interact.seeBlog(firstName, User);
-  });
+  Admin.interact.seeRead(firstName, User);
 
   transfer(readTutorial, token).to(User);
   // token.burn(readTutorial);
 
-  // User.only(() => {
-  //   const answer = declassify(interact.answerQuestion());
-  // });
-  // commit();
-  // User.publish(answer);
+  User.only(() => {
+    const answer = declassify(interact.answerQuestion());
+  });
+  commit();
+  User.publish(answer);
 
-  // transfer(answerQuiz, token).to(User);
+  Admin.interact.seeAnswer(firstName, User);
+
+  transfer(answerQuiz, token).to(User);
   // token.burn(answerQuiz);
 
-  // User.only(() => {
-  //   interact.playGame();
-  // });
-  // commit();
-  // User.publish();
+  User.only(() => {
+    interact.playGame();
+  });
+  commit();
+  User.publish();
 
-  // transfer(playGame, token).to(User);
+  Admin.interact.seePlay(firstName, User);
+
+  transfer(playGame, token).to(User);
   // token.burn(playGame);
 
-  // User.only(() => {
-  //   const bronze = declassify(interact.upgradeToBronze());
-  // });
-  // commit();
-  // User.pay(bronzeMembership);
+  User.only(() => {
+    const bronze = declassify(interact.upgradeToBronze());
+  });
+  commit();
+  User.pay([[bronzeMembership, token]]);
 
-  // User.only(() => {
-  //   const silver = declassify(interact.upgradeToSilver());
-  // });
-  // commit();
-  // User.pay(silverMembership);
+  Admin.interact.seeBronzeUpgrade(firstName, User);
 
-  // User.only(() => {
-  //   const gold = declassify(interact.upgradeToGold());
-  // });
-  // commit();
-  // User.pay(goldMembership);
+  User.only(() => {
+    const silver = declassify(interact.upgradeToSilver());
+  });
+  commit();
+  User.pay([[silverMembership, token]]);
 
-  // User.only(() => {
-  //   const vip = declassify(interact.upgradeToVIP());
-  // });
-  // commit();
-  // User.pay(vipMembership);
+  Admin.interact.seeSilverUpgrade(firstName, User);
+
+  User.only(() => {
+    const gold = declassify(interact.upgradeToGold());
+  });
+  commit();
+  User.pay([[goldMembership, token]]);
+
+  Admin.interact.seeGoldUpgrade(firstName, User);
+
+  User.only(() => {
+    const vip = declassify(interact.upgradeToVIP());
+  });
+  commit();
+  User.pay([[vipMembership, token]]);
+
+  Admin.interact.seeVipUpgrade(firstName, User);
 
   // User.only(() => {
   //   const point = declassify(interact.swapPoints(points));
@@ -191,8 +211,6 @@ export const main = Reach.App(() => {
 
   // transfer(anniversaryPoints, token).to(User);
   // token.burn(anniversaryPoints);
-
-  // Admin.interact.seeMembership(User);
 
   transfer(balance(token), token).to(Admin);
   transfer(balance()).to(Admin);
