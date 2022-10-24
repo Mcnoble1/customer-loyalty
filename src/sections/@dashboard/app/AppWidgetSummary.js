@@ -21,7 +21,6 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
-
 AppWidgetSummary.propTypes = {
   color: PropTypes.string,
   icon: PropTypes.string,

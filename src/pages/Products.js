@@ -11,10 +11,10 @@ import PRODUCTS from '../_mock/products';
 
 export default function EcommerceShop() {
   return (
-    <Page title="Dashboard: Products">
+    <Page title="Marketplace">
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
+          Marketplace
         </Typography>
 
         <ProductList products={PRODUCTS} />

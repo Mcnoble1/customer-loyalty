@@ -30,12 +30,12 @@ const CoverImgStyle = styled('img')({
 
 // ----------------------------------------------------------------------
 
-BlogPostCard.propTypes = {
+Academy.propTypes = {
   post: PropTypes.object.isRequired,
   index: PropTypes.number,
 };
 
-export default function BlogPostCard({ post, index }) {
+export default function Academy({ post, index }) {
   const { cover, title } = post;
   const latestPostLarge = index === 0;
   const latestPost = index === 1 || index === 2;
@@ -53,7 +53,7 @@ export default function BlogPostCard({ post, index }) {
                 width: '100%',
                 height: '100%',
                 position: 'absolute',
-                bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72),
+                bgcolor: (theme) => alpha(theme.palette.grey[900], 0.5),
               },
             }),
             ...((latestPostLarge || latestPost) && {
