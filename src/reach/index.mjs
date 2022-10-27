@@ -97,13 +97,12 @@ const startEnrollment = async () => {
         await ctc.apis.Customer.referFriend();
         const friend = await ask.ask(`Enter your friend's name: `, (x) => x);
         console.log(`You have referred your friend ${friend} to the Loyalty Program.`);
-        return friend;
+        // return friend;
       } catch (e) {
         console.log(`You couldn't refer your friend to the Loyalty Program`);
       }
-    } else {
-      return null;
     }
+
     console.log(`${who} balance after is ${await getBalance()}`);
 
     const read = await ask.ask(`Would you like to read the tutorial? (y/n)`, ask.yesno);
@@ -114,24 +113,87 @@ const startEnrollment = async () => {
       } catch (e) {
         console.log(`You have not read the tutorial.`);
       }
-    } else {
-      return null;
     }
 
     const answer = await ask.ask(`Would you like to answer the question? (y/n)`, ask.yesno);
     if (answer) {
       try {
         await ctc.apis.Customer.answerQuestion();
-        const question = await ask.ask(`Enter your answer: `, (x) => x);
-        const questionParams = { question };
+        // const question = await ask.ask(`Enter your answer: `, (x) => x);
+        // const questionParams = { question };
         console.log(`You have answered the question.`);
-        return questionParams;
+        // return questionParams;
       } catch (e) {
         console.log(`You have not answered the question.`);
       }
-    } else {
-      return null;
     }
+
+    const bronze = await ask.ask(`Would you like to upgrade to Bronze membership? [costs 250 tokens] (y/n)`, ask.yesno);
+    if (bronze) {
+      try {
+        await ctc.apis.Customer.upgradeToBronze();
+        console.log(`You are now a Bronze Member.`);
+      } catch (e) {
+        console.log(`You are not a Bronze Member.`);
+      }
+    } else {
+      console.log(`You are maintaining your membership`);
+    }
+
+    const silver = await ask.ask(`Would you like to upgrade to Silver membership? [costs 500 tokens] (y/n)`, ask.yesno);
+    if (silver) {
+      try {
+        await ctc.apis.Customer.upgradeToSilver();
+        console.log(`You are now a Silver Member.`);
+      } catch (e) {
+        console.log(`You are not a Silver Member.`);
+      }
+    } else {
+      console.log(`You are maintaining your membership`);
+    }
+
+    const gold = await ask.ask(`Would you like to upgrade to Gold membership? [costs 1000 tokens] (y/n)`, ask.yesno);
+    if (gold) {
+      try {
+        await ctc.apis.Customer.upgradeToGold();
+        console.log(`You are now a Gold Member.`);
+      } catch (e) {
+        console.log(`You are not a Gold Member.`);
+      }
+    } else {
+      console.log(`You are maintaining your membership`);
+    }
+
+    const vip = await ask.ask(`Would you like to upgrade to VIP membership? [costs 2000 tokens] (y/n)`, ask.yesno);
+    if (vip) {
+      try {
+        await ctc.apis.Customer.upgradeToVIP();
+        console.log(`You are now a VIP Member.`);
+      } catch (e) {
+        console.log(`You are not a VIP Member.`);
+      }
+    } else {
+      console.log(`You are maintaining your membership`);
+    }
+
+    // const redeem = await ask.ask(`Would you like to redeem your tokens? (y/n)`, ask.yesno);
+    // if (redeem) {
+    //   try {
+    //     await ctc.apis.Customer.redeemTokens();
+    //     console.log(`You have redeemed your tokens.`);
+    //   } catch (e) {
+    //     console.log(`You have not redeemed your tokens.`);
+    //   }
+    // } else {
+    //   console.log(`You are maintaining your tokens`);
+    // }
+
+    // interact.playGame = async () => {
+    //   const choice = await ask.ask(`Would you like to play the game? (y/n)`, ask.yesno);
+    //   if (choice) {
+    //     console.log(`You have played the game.`);
+    //   }
+    // };
   };
   await newCustomer('Customer1');
   await newCustomer('Customer2');
@@ -165,83 +227,39 @@ await ctcAdmin.participants.Admin({
     console.log(`${stdlib.formatAddress(who)} has enrolled`);
   },
 
-  seeReferral: async (name, who) => {
-    console.log(`${name} with the address ${stdlib.formatAddress(who)} referred a friend`);
+  seeReferral: async (who) => {
+    console.log(` ${stdlib.formatAddress(who)} referred a friend`);
   },
 
-  seeRead: async (name, who) => {
-    console.log(`Admin saw that ${name} with the address ${stdlib.formatAddress(who)} has read the blog post`);
+  seeRead: async (who) => {
+    console.log(`Admin saw that  ${stdlib.formatAddress(who)} has read the blog post`);
   },
 
-  seePlay: async (name, who) => {
-    console.log(`${name} with the address ${stdlib.formatAddress(who)} has played the game`);
+  seePlay: async (who) => {
+    console.log(` ${stdlib.formatAddress(who)} has played the game`);
   },
 
-  seeAnswer: async (name, who) => {
-    console.log(`${name} with the address ${stdlib.formatAddress(who)} has answered the question`);
+  seeAnswer: async (who) => {
+    console.log(` ${stdlib.formatAddress(who)} has answered the question`);
   },
 
-  seeBronzeUpgrade: async (name, who) => {
-    console.log(`${name} with the address ${stdlib.formatAddress(who)} has upgraded to Bronze`);
+  seeBronzeUpgrade: async (who) => {
+    console.log(` ${stdlib.formatAddress(who)} has upgraded to Bronze`);
   },
 
-  seeSilverUpgrade: async (name, who) => {
-    console.log(`${name} with the address ${stdlib.formatAddress(who)} has upgraded to Silver`);
+  seeSilverUpgrade: async (who) => {
+    console.log(` ${stdlib.formatAddress(who)} has upgraded to Silver`);
   },
 
-  seeGoldUpgrade: async (name, who) => {
-    console.log(`${name} with the address ${stdlib.formatAddress(who)} has upgraded to Gold`);
+  seeGoldUpgrade: async (who) => {
+    console.log(` ${stdlib.formatAddress(who)} has upgraded to Gold`);
   },
 
-  seeVipUpgrade: (name, who) => {
-    console.log(`${name} with the address ${stdlib.formatAddress(who)} has upgraded to VIP`);
+  seeVipUpgrade: (who) => {
+    console.log(` ${stdlib.formatAddress(who)} has upgraded to VIP`);
   },
 });
 
-// interact.upgradeToBronze = async () => {
-//   const choice = await ask.ask(`Would you like to upgrade to Bronze membership? [costs 250 tokens] (y/n)`, ask.yesno);
-//   if (!choice) {
-//     console.log(`You are maintaining your membership`);
-//   } else {
-//     console.log(`You are now a Bronze Member`);
-//   }
-// };
-
-// interact.upgradeToSilver = async () => {
-//   const choice = await ask.ask(`Would you like to upgrade to Silver membership? [costs 500 tokens] (y/n)`, ask.yesno);
-//   if (!choice) {
-//     console.log(`You are maintaining your membership`);
-//   } else {
-//     console.log(`You are now a Silver Member`);
-//   }
-// };
-
-// interact.upgradeToGold = async () => {
-//   const choice = await ask.ask(`Would you like to upgrade to Gold membership? [costs 1000 tokens] (y/n)`, ask.yesno);
-//   if (!choice) {
-//     console.log(`You are maintaining your membership`);
-//   } else {
-//     console.log(`You are now a Gold Member`);
-//   }
-// };
-
-// interact.upgradeToVIP = async () => {
-//   const choice = await ask.ask(`Would you like to upgrade to VIP membership? [costs 2000 tokens] (y/n)`, ask.yesno);
-//   if (!choice) {
-//     console.log(`You are maintaining your membership`);
-//   } else {
-//     console.log(`You are now a VIP Member`);
-//   }
-// };
-
-// interact.playGame = async () => {
-//   const choice = await ask.ask(`Would you like to play the game? (y/n)`, ask.yesno);
-//   if (choice) {
-//     console.log(`You have played the game.`);
-//   }
-// };
-
-// const after = await getBalance();
 const after = await getBalance();
 console.log(`Your balance is now ${after}`);
 
@@ -254,7 +272,8 @@ for (const account of customers) {
   console.log(`user has ${stdlib.formatCurrency(amt)} ${stdlib.standardUnit} and ${amtToken} of the NFT.`); // log the balance
 }
 
-console.log('Goodbye, Admin and Customer!');
+console.log(`You have completed the Loyalty Program tutorial.`);
+
 ask.done();
 
 done = true;
@@ -283,3 +302,18 @@ done = true;
 //       console.log(`${friend}'s balance after is ${await getBalance()}`);
 //     }
 //   };
+
+const getAccountsList = async (ctc) => {
+  let prov = await stdlib.getProvider();
+  let ctcAddr = stdlib.formatAddress(await ctc.getContractAddress());
+  const ctcInfo = await getCtcInfo();
+
+  const a = await prov.indexer.searchAccounts().applicationID(stdlib.bigNumberToNumber(ctcInfo)).do();
+
+  let accounts = [];
+  for (x in a.accounts) {
+    accounts.push(a.accounts[x].address);
+  }
+
+  return accounts;
+};

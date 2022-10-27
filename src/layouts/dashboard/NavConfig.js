@@ -46,11 +46,6 @@ const navConfig = [
     path: '/login',
     icon: getIcon('eva:lock-fill'),
   },
-  {
-    title: 'register',
-    path: '/register',
-    icon: getIcon('eva:person-add-fill'),
-  },
 ];
 
 export default navConfig;

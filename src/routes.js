@@ -3,6 +3,7 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
+import Home from './pages/Home';
 import Blog from './pages/Blog';
 import User from './pages/User';
 import Login from './pages/Login';
@@ -35,6 +36,10 @@ export default function Router() {
       element: <Login />,
     },
     {
+      path: 'home',
+      element: <Home />,
+    },
+    {
       path: 'register',
       element: <Register />,
     },
@@ -42,7 +47,7 @@ export default function Router() {
       path: '/',
       element: <LogoOnlyLayout />,
       children: [
-        { path: '/', element: <Navigate to="/dashboard/app" /> },
+        { path: '/', element: <Navigate to="/dashboard/home" /> },
         { path: '*', element: <Navigate to="/404" /> },
       ],
     },

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable arrow-body-style */
 /* eslint-disable no-use-before-define */
 /* eslint-disable eqeqeq */
 /* eslint-disable no-restricted-globals */
@@ -14,15 +16,15 @@ const platformToken = Token;
 // });
 // let tokenBalance = 0;
 const enrollmentPoints = 2;
-const referralPoints = 50000;
+const referralPoints = 5;
 const anniversaryPoints = 10;
-const goldMembership = 10000;
-const silverMembership = 5000;
-const bronzeMembership = 2500;
-const vipMembership = 20000;
+const goldMembership = 5;
+const silverMembership = 3;
+const bronzeMembership = 1;
+const vipMembership = 10;
 const playGame = 5000;
 const winGame = 20;
-const readTutorial = 10000;
+const readTutorial = 10;
 const answerQuiz = 20000;
 const checkinPoints = 5;
 
@@ -35,18 +37,18 @@ export const main = Reach.App(() => {
     getToken: platformToken,
     ready: Fun([], Null),
     seeCustomer: Fun([Address], Null),
-    seeReferral: Fun([Bytes(64), Address], Null),
-    seeAnniversary: Fun([Bytes(64), Address], Null),
-    seeAnswer: Fun([Bytes(64), Address], Null),
-    seeCheckin: Fun([Bytes(64), Address], Null),
-    seePlay: Fun([Bytes(64), Address], Null),
-    seeWinner: Fun([Bytes(64), Address], Null),
-    seeRead: Fun([Bytes(64), Address], Null),
-    seeBronzeUpgrade: Fun([Bytes(64), Address], Null),
-    seeSilverUpgrade: Fun([Bytes(64), Address], Null),
-    seeGoldUpgrade: Fun([Bytes(64), Address], Null),
-    seeVipUpgrade: Fun([Bytes(64), Address], Null),
-    seePurchase: Fun([Bytes(64), Address], Null),
+    seeReferral: Fun([Address], Null),
+    seeAnniversary: Fun([Address], Null),
+    seeAnswer: Fun([Address], Null),
+    seeCheckin: Fun([Address], Null),
+    seePlay: Fun([Address], Null),
+    seeWinner: Fun([Address], Null),
+    seeRead: Fun([Address], Null),
+    seeBronzeUpgrade: Fun([Address], Null),
+    seeSilverUpgrade: Fun([Address], Null),
+    seeGoldUpgrade: Fun([Address], Null),
+    seeVipUpgrade: Fun([Address], Null),
+    seePurchase: Fun([Address], Null),
   });
   const Customer = API('Customer', {
     // Specify Bob's interact interface here
@@ -58,21 +60,22 @@ export const main = Reach.App(() => {
       //   lastName: Bytes(64),
       // })
     ),
-    // readBlog: Fun([], Null),
-    // answerQuestion: Fun([], Bytes(64)),
-    // referFriend: Fun(
-    //   [],
-    //   Object({
-    //     friendName: Bytes(64),
-    //     // account: Address,
-    //   })
-    // ),
-    // playGame: Fun([], Null),
+    readBlog: Fun([], Null),
+    answerQuestion: Fun([], Null),
+    referFriend: Fun(
+      [],
+      Null
+      // Object({
+      //   friendName: Bytes(64),
+      //   // account: Address,
+      // })
+    ),
+    playGame: Fun([], Null),
     // buyNFT: Fun([], Null),
-    // upgradeToGold: Fun([], Null),
-    // upgradeToSilver: Fun([], Null),
-    // upgradeToBronze: Fun([], Null),
-    // upgradeToVIP: Fun([], Null),
+    upgradeToGold: Fun([], Null),
+    upgradeToSilver: Fun([], Null),
+    upgradeToBronze: Fun([], Null),
+    upgradeToVIP: Fun([], Null),
     // swapPoints: Fun([UInt], Null),
     // checkin: Fun([], Null),
     // seeAnniversary: Fun([], Null),
@@ -92,7 +95,7 @@ export const main = Reach.App(() => {
   Token.track(token);
   Info.details.set(token);
 
-  const tokenAmount = 500000;
+  const tokenAmount = 100000;
   commit();
   Admin.pay([[tokenAmount, token]]); // pay the token into the contract
 
@@ -105,9 +108,11 @@ export const main = Reach.App(() => {
   // const pMap = new Map(Address, Null);
 
   const [count] = parallelReduce([0])
-    .invariant(balance(token) == tokenAmount - count * enrollmentPoints && balance() >= 0)
+    // .invariant(balance(token) == tokenAmount - count * enrollmentPoints)
+    .invariant(balance(token) == tokenAmount)
     .invariant(pSet.Map.size() >= 0)
     .while(count < 5)
+    .paySpec([token])
     .api_(Customer.enroll, () => {
       // CHECK EXPR -- assumptions about your program
       check(!pSet.member(this), 'Already enrolled into the loyalty program');
@@ -119,21 +124,112 @@ export const main = Reach.App(() => {
           const who = this;
           Admin.interact.seeCustomer(who); // log to the front end
           transfer(enrollmentPoints, token).to(who);
+          commit();
+          Admin.pay([[enrollmentPoints, token]]);
           return [count + 1];
         },
       ];
+    })
+    .api_(Customer.referFriend, () => {
+      return [
+        (ret) => {
+          ret(null);
+          const who = this;
+          Admin.interact.seeReferral(who);
+          transfer(referralPoints, token).to(who);
+          commit();
+          Admin.pay([[referralPoints, token]]);
+          return [count];
+        },
+      ];
+    })
+    .api_(Customer.readBlog, () => {
+      return [
+        (ret) => {
+          ret(null);
+          const who = this;
+          Admin.interact.seeRead(who);
+          transfer(readTutorial, token).to(who);
+          commit();
+          Admin.pay([[readTutorial, token]]);
+          return [count];
+        },
+      ];
+    })
+    .api_(Customer.answerQuestion, () => {
+      return [
+        (ret) => {
+          ret(null);
+          const who = this;
+          Admin.interact.seeAnswer(who);
+          transfer(answerQuiz, token).to(who);
+          commit();
+          Admin.pay([[answerQuiz, token]]);
+          return [count];
+        },
+      ];
+    })
+    .api_(Customer.playGame, () => {
+      return [
+        (ret) => {
+          ret(null);
+          const who = this;
+          Admin.interact.seePlay(who);
+          transfer(playGame, token).to(who);
+          commit();
+          Admin.pay([[playGame, token]]);
+          return [count];
+        },
+      ];
+    })
+    .api_(Customer.upgradeToGold, () => {
+      return [
+        [0, [goldMembership, token]],
+        (ret) => {
+          ret(null);
+          const who = this;
+          Admin.interact.seeGoldUpgrade(who);
+          transfer(goldMembership, token).to(Admin);
+          return [count];
+        },
+      ];
+    })
+    .api_(Customer.upgradeToSilver, () => {
+      return [
+        [0, [silverMembership, token]],
+        (ret) => {
+          ret(null);
+          const who = this;
+          Admin.interact.seeSilverUpgrade(who);
+          transfer(silverMembership, token).to(Admin);
+          return [count];
+        },
+      ];
+    })
+    .api_(Customer.upgradeToBronze, () => {
+      return [
+        [0, [bronzeMembership, token]],
+        (ret) => {
+          ret(null);
+          const who = this;
+          Admin.interact.seeBronzeUpgrade(who);
+          transfer(bronzeMembership, token).to(Admin);
+          return [count];
+        },
+      ];
+    })
+    .api_(Customer.upgradeToVIP, () => {
+      return [
+        [0, [vipMembership, token]],
+        (ret) => {
+          ret(null);
+          const who = this;
+          Admin.interact.seeVipUpgrade(who);
+          transfer(vipMembership, token).to(Admin);
+          return [count];
+        },
+      ];
     });
-  // .api_(Customer.readBlog, () => {
-  //   return [ (ret) => {
-  //     ret(null);
-  //     const who = this;
-  //     done = false;
-  //     Admin.interact.confirmGuest(who);
-  //     transfer(enrollmentPoints, token).to(who);
-  //     return [ done ];
-  //   } ];
-  // }),
-  // .api_(Customer.answerQuestion, () => {
 
   // The second one to publish always attaches
 

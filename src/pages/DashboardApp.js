@@ -1,9 +1,13 @@
 // @mui
 import { Grid, Container, Typography } from '@mui/material';
+import { loadStdlib } from '@reach-sh/stdlib';
+import * as backend from '../index.main.mjs';
+
 // components
 import Page from '../components/Page';
 // sections
 import { AppWidgetSummary } from '../sections/@dashboard/app';
+import { account } from '../layouts/utils';
 
 // ----------------------------------------------------------------------
 
@@ -27,10 +31,6 @@ export default function DashboardApp() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Membership" total={1} color="warning" icon={'ant-design:windows-filled'} />
           </Grid>
-
-          {/* <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Bug Reports" total={234} color="error" icon={'ant-design:bug-filled'} />
-          </Grid> */}
         </Grid>
       </Container>
     </Page>

@@ -1,6 +1,6 @@
 // import { Link as RouterLink } from 'react-router-dom';
 // material
-import { Grid, Button, Container, Stack, Typography } from '@mui/material';
+import { Grid, Container, Stack, Typography } from '@mui/material';
 // components
 import Page from '../components/Page';
 // import Iconify from '../components/Iconify';
