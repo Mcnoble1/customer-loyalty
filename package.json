@@ -46,6 +46,7 @@
     "@iconify/react": "^3.2.2",
     "@mui/lab": "^5.0.0-alpha.88",
     "@mui/material": "^5.8.6",
+    "@reach-sh/stdlib": "^0.1.12-rc.6",
     "@testing-library/jest-dom": "^5.16.4",
     "apexcharts": "^3.35.3",
     "change-case": "^4.1.2",
