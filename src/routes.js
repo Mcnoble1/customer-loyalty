@@ -4,9 +4,13 @@ import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
 import Home from './pages/Home';
+import Admin from './pages/Admin';
+import Enroll from './pages/Enroll';
 import Blog from './pages/Blog';
+import Reach from './pages/Reach';
+import Algorand from './pages/Algorand';
+import Web3 from './pages/Web3';
 import User from './pages/User';
-import Login from './pages/Login';
 import Register from './pages/Register';
 import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
@@ -26,18 +30,25 @@ export default function Router() {
         { path: 'user', element: <User /> },
         { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> },
+        { path: 'algorand', element: <Algorand /> },
+        { path: 'reach', element: <Reach /> },
+        { path: 'web3', element: <Web3 /> },
         { path: 'membership', element: <Membership /> },
         { path: 'games', element: <Games /> },
         { path: 'referrals', element: <Referral /> },
       ],
     },
     {
-      path: 'login',
-      element: <Login />,
-    },
-    {
       path: 'home',
       element: <Home />,
+    },
+    {
+      path: 'admin',
+      element: <Admin />,
+    },
+    {
+      path: 'enroll',
+      element: <Enroll />,
     },
     {
       path: 'register',
@@ -47,13 +58,13 @@ export default function Router() {
       path: '/',
       element: <LogoOnlyLayout />,
       children: [
-        { path: '/', element: <Navigate to="/dashboard/home" /> },
-        { path: '*', element: <Navigate to="/404" /> },
+        { path: '/', element: <Navigate to="/home" /> },
+        { path: '*', element: <Navigate to="/home" /> },
       ],
     },
     {
       path: '*',
-      element: <Navigate to="/404" replace />,
+      element: <Navigate to="/home" replace />,
     },
   ]);
 }

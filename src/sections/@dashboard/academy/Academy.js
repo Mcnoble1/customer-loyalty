@@ -78,7 +78,7 @@ export default function Academy({ post, index }) {
           }}
         >
           <TitleStyle
-            to="#"
+            to="/dashboard/algorand"
             color="inherit"
             variant="subtitle2"
             underline="hover"

@@ -1,11 +1,10 @@
-// import { Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Container, Typography } from '@mui/material';
+import { Container, Button, Stack } from '@mui/material';
 // components
 import Page from '../components/Page';
 // sections
-import { RegisterForm } from '../sections/auth/register';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -27,12 +26,29 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Register() {
+  const navigate = useNavigate();
+
+  const enroll = async () => {
+    navigate('/enroll', { replace: true });
+  };
+
+  const admin = async () => {
+    navigate('/admin', { replace: true });
+  };
+
   return (
     <Page title="Register">
       <RootStyle>
         <Container>
           <ContentStyle>
-            <RegisterForm />
+            <Stack spacing={3}>
+              <Button fullWidth size="large" onClick={admin} variant="contained">
+                Deploy the Loyalty Program
+              </Button>
+              <Button fullWidth size="large" onClick={enroll} variant="contained">
+                Enroll into the Loyalty Program
+              </Button>
+            </Stack>
           </ContentStyle>
         </Container>
       </RootStyle>

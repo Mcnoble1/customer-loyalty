@@ -8,12 +8,9 @@
 /* eslint-disable no-unused-expressions */
 
 import { loadStdlib, ask } from '@reach-sh/stdlib';
-import * as backend from './build/index.main.mjs';
+import * as backend from '../index.main.mjs';
 
 const stdlib = loadStdlib({ REACH_NO_WARN: 'Y' });
-
-let done = false;
-const customers = [];
 
 // const isAdmin = await ask.ask('Are you an Admin', ask.yesno);
 
@@ -29,7 +26,16 @@ const getBalance = async () => stdlib.formatCurrency(await stdlib.balanceOf(accA
 const before = await getBalance();
 console.log(`Your balance before is ${before} ${stdlib.standardUnit}`);
 
-// const balOf = async (acc, tok) => stdlib.balanceOf(acc, tok);
+const fmt = (x) => stdlib.formatCurrency(x, 4);
+// eslint-disable-next-line no-return-await
+const getBal = async (who, tok) => (tok ? await stdlib.balanceOf(who, tok) : fmt(await stdlib.balanceOf(who)));
+
+const logBalance = async (acc, tok) => {
+  const bal = await getBal(acc, tok);
+  const unit = tok ? 'of LYC' : stdlib.standardUnit;
+  console.log(`${acc.getDebugLabel()} has ${bal} ${unit}.`);
+  return bal;
+};
 
 let tokenParams = null;
 // let acc = null;
@@ -48,6 +54,10 @@ tokenParams = tokenId; // params for the NFT
 // info = await ask.ask('Please paste the contract information: ', JSON.parse);
 // const ctc = accCustomer.contract(backend, info);
 // }
+await logBalance(accAdmin, tokenId);
+
+let done = false;
+const customers = [];
 
 const startEnrollment = async () => {
   const newCustomer = async (who) => {
@@ -66,17 +76,13 @@ const startEnrollment = async () => {
       acc.setGasLimit(myGasLimit);
     } else if (stdlib.connector == 'ALGO') {
       console.log(`Demonstrating need to opt-in on ALGO`);
-      // await shouldFail(async () => await zorkmid.mint(accAlice, startingBalance));
       console.log(`Opt-ing in on ALGO`);
-      const id = await ctc.unsafeViews.Info.details();
+      const id = await ctc.unsafeViews.Platform.token();
       console.log(id);
       await acc.tokenAccept(id);
+      const bal = await logBalance(acc, tokenId);
+      console.log(bal);
     }
-
-    // const bal = await balOf(acc, tokenParams);
-    // console.log(bal.toString());
-
-    // return enrollmentParams;
 
     try {
       await ctc.apis.Customer.enroll();
@@ -84,8 +90,7 @@ const startEnrollment = async () => {
       // const lastName = await ask.ask('Enter your Last Name', (x) => x);
       // const enrollmentParams = { firstName, lastName };
       console.log(`You have enrolled into the Loyalty Program.`);
-
-      console.log(`You have enrolled into the Loyalty Program`);
+      await logBalance(acc, tokenId);
     } catch (e) {
       console.log(`${who} failed to join the Loyalty Program`);
     }
@@ -98,6 +103,7 @@ const startEnrollment = async () => {
         const friend = await ask.ask(`Enter your friend's name: `, (x) => x);
         console.log(`You have referred your friend ${friend} to the Loyalty Program.`);
         // return friend;
+        await logBalance(acc, tokenId);
       } catch (e) {
         console.log(`You couldn't refer your friend to the Loyalty Program`);
       }
@@ -110,6 +116,7 @@ const startEnrollment = async () => {
       try {
         await ctc.apis.Customer.readBlog();
         console.log(`You have read the tutorial.`);
+        await logBalance(acc, tokenId);
       } catch (e) {
         console.log(`You have not read the tutorial.`);
       }
@@ -122,6 +129,7 @@ const startEnrollment = async () => {
         // const question = await ask.ask(`Enter your answer: `, (x) => x);
         // const questionParams = { question };
         console.log(`You have answered the question.`);
+        await logBalance(acc, tokenId);
         // return questionParams;
       } catch (e) {
         console.log(`You have not answered the question.`);
@@ -133,6 +141,7 @@ const startEnrollment = async () => {
       try {
         await ctc.apis.Customer.upgradeToBronze();
         console.log(`You are now a Bronze Member.`);
+        await logBalance(acc, tokenId);
       } catch (e) {
         console.log(`You are not a Bronze Member.`);
       }
@@ -145,6 +154,7 @@ const startEnrollment = async () => {
       try {
         await ctc.apis.Customer.upgradeToSilver();
         console.log(`You are now a Silver Member.`);
+        await logBalance(acc, tokenId);
       } catch (e) {
         console.log(`You are not a Silver Member.`);
       }
@@ -157,6 +167,7 @@ const startEnrollment = async () => {
       try {
         await ctc.apis.Customer.upgradeToGold();
         console.log(`You are now a Gold Member.`);
+        await logBalance(acc, tokenId);
       } catch (e) {
         console.log(`You are not a Gold Member.`);
       }
@@ -169,24 +180,13 @@ const startEnrollment = async () => {
       try {
         await ctc.apis.Customer.upgradeToVIP();
         console.log(`You are now a VIP Member.`);
+        await logBalance(acc, tokenId);
       } catch (e) {
         console.log(`You are not a VIP Member.`);
       }
     } else {
       console.log(`You are maintaining your membership`);
     }
-
-    // const redeem = await ask.ask(`Would you like to redeem your tokens? (y/n)`, ask.yesno);
-    // if (redeem) {
-    //   try {
-    //     await ctc.apis.Customer.redeemTokens();
-    //     console.log(`You have redeemed your tokens.`);
-    //   } catch (e) {
-    //     console.log(`You have not redeemed your tokens.`);
-    //   }
-    // } else {
-    //   console.log(`You are maintaining your tokens`);
-    // }
 
     // interact.playGame = async () => {
     //   const choice = await ask.ask(`Would you like to play the game? (y/n)`, ask.yesno);
@@ -198,8 +198,9 @@ const startEnrollment = async () => {
   await newCustomer('Customer1');
   await newCustomer('Customer2');
   await newCustomer('Customer3');
+  // console.log(customers);
   while (!done) {
-    await stdlib.wait(0);
+    await stdlib.wait(1);
   }
 };
 
@@ -215,8 +216,6 @@ await ctcAdmin.participants.Admin({
   getToken: tokenParams,
 
   // console.log(`Admin sets the token parameter: `, tokenParams);
-  // const bal = await balOf(acc, tokenParams);
-  // console.log(bal.toString());
 
   ready: () => {
     console.log('The event is ready to start accepting customers.');
@@ -263,14 +262,13 @@ await ctcAdmin.participants.Admin({
 const after = await getBalance();
 console.log(`Your balance is now ${after}`);
 
-// const balAfter = await balOf(acc, tokenParams);
-// console.log(balAfter.toString());
-
 for (const account of customers) {
   // for each bidder
   const [amt, amtToken] = await stdlib.balancesOf(account, [null, tokenParams]); // get the balance
-  console.log(`user has ${stdlib.formatCurrency(amt)} ${stdlib.standardUnit} and ${amtToken} of the NFT.`); // log the balance
+  console.log(`user has ${stdlib.formatCurrency(amt)} ${stdlib.standardUnit} and ${amtToken} of LYC.`); // log the balance
 }
+
+console.log(await logBalance(accAdmin, tokenId));
 
 console.log(`You have completed the Loyalty Program tutorial.`);
 
@@ -303,17 +301,17 @@ done = true;
 //     }
 //   };
 
-const getAccountsList = async (ctc) => {
-  let prov = await stdlib.getProvider();
-  let ctcAddr = stdlib.formatAddress(await ctc.getContractAddress());
-  const ctcInfo = await getCtcInfo();
+// const getAccountsList = async (ctc) => {
+//   let prov = await stdlib.getProvider();
+//   let ctcAddr = stdlib.formatAddress(await ctc.getContractAddress());
+//   const ctcInfo = await getCtcInfo();
 
-  const a = await prov.indexer.searchAccounts().applicationID(stdlib.bigNumberToNumber(ctcInfo)).do();
+//   const a = await prov.indexer.searchAccounts().applicationID(stdlib.bigNumberToNumber(ctcInfo)).do();
 
-  let accounts = [];
-  for (x in a.accounts) {
-    accounts.push(a.accounts[x].address);
-  }
+//   let accounts = [];
+//   for (x in a.accounts) {
+//     accounts.push(a.accounts[x].address);
+//   }
 
-  return accounts;
-};
+//   return accounts;
+// };
