@@ -38,12 +38,12 @@ const navConfig = [
   },
   {
     title: 'swap tokens',
-    path: '/login',
+    path: '#',
     icon: getIcon('eva:lock-fill'),
   },
   {
-    title: 'login',
-    path: '/login',
+    title: 'users',
+    path: '/dashboard/user',
     icon: getIcon('eva:lock-fill'),
   },
 ];

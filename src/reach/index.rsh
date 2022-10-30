@@ -14,26 +14,25 @@ const platformToken = Token;
 //   firstName: Bytes(64),
 //   lastName: Bytes(64),
 // });
-// let tokenBalance = 0;
-const enrollmentPoints = 2;
-const referralPoints = 5;
-const anniversaryPoints = 10;
-const goldMembership = 5;
-const silverMembership = 3;
-const bronzeMembership = 1;
-const vipMembership = 10;
-const playGame = 5000;
-const winGame = 20;
-const readTutorial = 10;
-const answerQuiz = 20000;
-const checkinPoints = 5;
+const enrollmentPoints = 100;
+const referralPoints = 100;
+const anniversaryPoints = 100;
+const goldMembership = 100;
+const silverMembership = 100;
+const bronzeMembership = 100;
+const vipMembership = 100;
+const playGame = 100;
+const winGame = 100;
+const readTutorial = 100;
+const answerQuiz = 100;
+const checkinPoints = 100;
 
 export const main = Reach.App(() => {
   setOptions({ autoTrackPublishedTokens: false });
   setOptions({ untrustworthyMaps: true });
 
   const Admin = Participant('Admin', {
-    // Specify Alice's interact interface here
+    // Specify Admin's interact interface here
     getToken: platformToken,
     ready: Fun([], Null),
     seeCustomer: Fun([Address], Null),
@@ -51,7 +50,7 @@ export const main = Reach.App(() => {
     seePurchase: Fun([Address], Null),
   });
   const Customer = API('Customer', {
-    // Specify Bob's interact interface here
+    // Specify Customers interact interface here
     enroll: Fun(
       [],
       Null
@@ -80,8 +79,8 @@ export const main = Reach.App(() => {
     // checkin: Fun([], Null),
     // seeAnniversary: Fun([], Null),
   });
-  const Info = View('Info', {
-    details: platformToken,
+  const Platform = View('Platform', {
+    token: platformToken,
   });
 
   init();
@@ -93,7 +92,7 @@ export const main = Reach.App(() => {
   Admin.publish(token);
   // const { token } = tokenId;
   Token.track(token);
-  Info.details.set(token);
+  Platform.token.set(token);
 
   const tokenAmount = 100000;
   commit();
@@ -111,7 +110,7 @@ export const main = Reach.App(() => {
     // .invariant(balance(token) == tokenAmount - count * enrollmentPoints)
     .invariant(balance(token) == tokenAmount)
     .invariant(pSet.Map.size() >= 0)
-    .while(count < 5)
+    .while(count < 3)
     .paySpec([token])
     .api_(Customer.enroll, () => {
       // CHECK EXPR -- assumptions about your program
