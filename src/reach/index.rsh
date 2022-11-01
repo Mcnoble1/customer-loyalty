@@ -10,6 +10,21 @@
 
 const platformToken = Token;
 
+const rewards = Object({
+  enrollmentPoints: UInt,
+  referralPoints: UInt,
+  anniversaryPoints: UInt,
+  bronzeMembership: UInt,
+  silverMembership: UInt,
+  goldMembership: UInt,
+  vipMembership: UInt,
+  playGame: UInt,
+  winGame: UInt,
+  readTutorial: UInt,
+  answerQuiz: UInt,
+  checkinPoints: UInt,
+});
+
 // const Enroll = Object({
 //   firstName: Bytes(64),
 //   lastName: Bytes(64),
