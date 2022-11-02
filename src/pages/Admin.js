@@ -44,28 +44,6 @@ export default function DashboardLayout() {
 
   const [ctcInfoStr, setCtcInfoStr] = useState('');
 
-  //   const reservations = (event) => {
-  //     for (const rsvp of RSVPs) {
-  //       event.currentTarget.insertAdjacentHTML(
-  //         'afterend',
-  //         `<p className="rsvp">${rsvp} made a reservation for the event.</p>`
-  //       );
-  //       // sleep(5000);
-  //       // event.currentTarget.adjacentHTML.remove()
-  //       // = `<p className="rsvp">See Reservations</p>`
-  //     }
-  //   };
-
-  //   async function copyToClipboard(button) {
-  //     navigator.clipboard.writeText(ctcInfoStr);
-  //     const origInnerHTML = button.innerHTML;
-  //     button.innerHTML = 'Copied!';
-  //     button.disabled = true;
-  //     await sleep(1000);
-  //     button.innerHTML = origInnerHTML;
-  //     button.disabled = false;
-  //   }
-
   async function deploy() {
     try {
       const acc = await account();
@@ -81,48 +59,8 @@ export default function DashboardLayout() {
         deadline: { ETH: 10, ALGO: 100, CFX: 1000 }[stdlib.connector],
         getToken: tokenId,
 
-        // seeRSVP: (who) => {
-        //   setAddress(stdlib.formatAddress(who));
-        //   setRSVPs((RSVPs) => [...RSVPs, stdlib.formatAddress(who)]);
-        // },
         ready: () => {
           console.log('The event is ready to start accepting customers.');
-        },
-
-        seeCustomer: async (who) => {
-          console.log(`${stdlib.formatAddress(who)} has enrolled`);
-        },
-
-        seeReferral: async (who) => {
-          console.log(` ${stdlib.formatAddress(who)} referred a friend`);
-        },
-
-        seeRead: async (who) => {
-          console.log(`Admin saw that  ${stdlib.formatAddress(who)} has read the blog post`);
-        },
-
-        seePlay: async (who) => {
-          console.log(` ${stdlib.formatAddress(who)} has played the game`);
-        },
-
-        seeAnswer: async (who) => {
-          console.log(` ${stdlib.formatAddress(who)} has answered the question`);
-        },
-
-        seeBronzeUpgrade: async (who) => {
-          console.log(` ${stdlib.formatAddress(who)} has upgraded to Bronze`);
-        },
-
-        seeSilverUpgrade: async (who) => {
-          console.log(` ${stdlib.formatAddress(who)} has upgraded to Silver`);
-        },
-
-        seeGoldUpgrade: async (who) => {
-          console.log(` ${stdlib.formatAddress(who)} has upgraded to Gold`);
-        },
-
-        seeVipUpgrade: (who) => {
-          console.log(` ${stdlib.formatAddress(who)} has upgraded to VIP`);
         },
       };
       backend.Admin(ctc, interact);
@@ -130,15 +68,11 @@ export default function DashboardLayout() {
       console.log(`Your contract is deployed as = ${ctcInfoStr}`);
       setCtcInfoStr(ctcInfoStr);
 
-      navigate('/dashboard/user', { replace: true });
+      navigate('/admindash/user', { replace: true });
     } catch (err) {
       console.log(err);
     }
   }
-
-  //   const deploy = async () => {
-  //     navigate('/dashboard/user', { replace: true });
-  //   };
 
   return (
     <RootStyle>

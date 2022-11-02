@@ -17,6 +17,7 @@ import DashboardApp from './pages/DashboardApp';
 import Membership from './pages/Membership';
 import Games from './pages/Games';
 import Referral from './pages/Referrals';
+import Rewards from './pages/Rewards';
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +28,6 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { path: 'app', element: <DashboardApp /> },
-        { path: 'user', element: <User /> },
         { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> },
         { path: 'algorand', element: <Algorand /> },
@@ -36,6 +36,15 @@ export default function Router() {
         { path: 'membership', element: <Membership /> },
         { path: 'games', element: <Games /> },
         { path: 'referrals', element: <Referral /> },
+      ],
+    },
+    {
+      path: '/admindash',
+      element: <DashboardLayout />,
+      children: [
+        { path: 'app', element: <DashboardApp /> },
+        { path: 'user', element: <User /> },
+        { path: 'rewards', element: <Rewards /> },
       ],
     },
     {

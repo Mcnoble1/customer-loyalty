@@ -41,11 +41,6 @@ const navConfig = [
     path: '#',
     icon: getIcon('eva:lock-fill'),
   },
-  {
-    title: 'users',
-    path: '/dashboard/user',
-    icon: getIcon('eva:lock-fill'),
-  },
 ];
 
 export default navConfig;
