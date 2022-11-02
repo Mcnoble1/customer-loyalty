@@ -97,21 +97,90 @@ export default function DashboardLayout() {
 
   return (
     <RootStyle>
-      <DashboardNavbar />
+      {/* <DashboardNavbar /> */}
       <Container maxWidth="sm">
         <ContentStyle>
           <Typography variant="h4" gutterBottom>
-            Paste the Contract Info
+            Set Loyalty Rewards Points
           </Typography>
           <FormProvider methods={methods} onSubmit={enroll}>
             <Stack spacing={3}>
-              {/* <RHFTextField name="name" required label="Name" /> */}
+              <RHFTextField
+                name="info"
+                label="Enrollment Points"
+                required
+                type="number"
+                onChange={(e) => setInfo(e.target.value)}
+              />
+              <RHFTextField
+                name="info"
+                label="Referral Points"
+                required
+                type="number"
+                onChange={(e) => setInfo(e.target.value)}
+              />
+              <RHFTextField
+                name="info"
+                label="Anniversary Points"
+                required
+                type="number"
+                onChange={(e) => setInfo(e.target.value)}
+              />
+              <RHFTextField
+                name="info"
+                label="Gold Membership Points"
+                required
+                type="number"
+                onChange={(e) => setInfo(e.target.value)}
+              />
+              <RHFTextField
+                name="info"
+                label="Silver Membership Points"
+                required
+                type="number"
+                onChange={(e) => setInfo(e.target.value)}
+              />
+              <RHFTextField
+                name="info"
+                label="Bronze Membership Points"
+                required
+                type="number"
+                onChange={(e) => setInfo(e.target.value)}
+              />
+              <RHFTextField
+                name="info"
+                label="Play Game Points"
+                required
+                type="number"
+                onChange={(e) => setInfo(e.target.value)}
+              />
+              <RHFTextField
+                name="info"
+                label="Read Tutorial Points"
+                required
+                type="number"
+                onChange={(e) => setInfo(e.target.value)}
+              />
+              <RHFTextField
+                name="info"
+                label="Answer Quiz Points"
+                required
+                type="number"
+                onChange={(e) => setInfo(e.target.value)}
+              />
+              <RHFTextField
+                name="info"
+                label="Check In Points"
+                required
+                type="number"
+                onChange={(e) => setInfo(e.target.value)}
+              />
 
               <RHFTextField
                 name="info"
-                label="Contract Info"
+                label="NFT Points"
                 required
-                type="textarea"
+                type="number"
                 onChange={(e) => setInfo(e.target.value)}
               />
             </Stack>
@@ -119,7 +188,7 @@ export default function DashboardLayout() {
             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }} />
 
             <Button fullWidth size="large" type="submit" variant="contained">
-              Enroll
+              Set
             </Button>
           </FormProvider>
         </ContentStyle>

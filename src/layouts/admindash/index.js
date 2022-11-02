@@ -32,7 +32,7 @@ const MainStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function DashboardLayout() {
+export default function AdminDashboard() {
   const [open, setOpen] = useState(false);
 
   return (

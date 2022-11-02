@@ -55,7 +55,7 @@ export default function DashboardLayout() {
 
     console.log(ctc);
 
-    acc.tokenAccept({ _hex: '0x071ef956', _isBigNumber: true });
+    acc.tokenAccept({ _hex: '0x072b9b07', _isBigNumber: true });
 
     // if (stdlib.connector === 'ETH' || stdlib.connector === 'CFX') {
     //   const myGasLimit = 5000000;
