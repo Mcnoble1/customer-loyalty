@@ -1,6 +1,7 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
+import AdminDashboard from './layouts/admindash';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
 import Home from './pages/Home';
@@ -40,9 +41,9 @@ export default function Router() {
     },
     {
       path: '/admindash',
-      element: <DashboardLayout />,
+      element: <AdminDashboard />,
       children: [
-        { path: 'app', element: <DashboardApp /> },
+        { path: 'app', element: <User /> },
         { path: 'user', element: <User /> },
         { path: 'rewards', element: <Rewards /> },
       ],

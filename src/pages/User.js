@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { loadStdlib } from '@reach-sh/stdlib';
+import './textarea.css';
 
 // material
 import { Card, Stack, Container, Typography } from '@mui/material';
@@ -24,29 +25,31 @@ export default function User() {
   const [bronze, setBronze] = useState('');
   const [silver, setSilver] = useState('');
   const [gold, setGold] = useState('');
-  const [vip, setVip] = useState('');
+  const [ctcInfoStr, setCtcInfoStr] = useState('');
 
-  //   const reservations = (event) => {
-  //     for (const rsvp of RSVPs) {
-  //       event.currentTarget.insertAdjacentHTML(
-  //         'afterend',
-  //         `<p className="rsvp">${rsvp} made a reservation for the event.</p>`
-  //       );
-  //       // sleep(5000);
-  //       // event.currentTarget.adjacentHTML.remove()
-  //       // = `<p className="rsvp">See Reservations</p>`
-  //     }
-  //   };
+  const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
-  //   async function copyToClipboard(button) {
-  //     navigator.clipboard.writeText(ctcInfoStr);
-  //     const origInnerHTML = button.innerHTML;
-  //     button.innerHTML = 'Copied!';
-  //     button.disabled = true;
-  //     await sleep(1000);
-  //     button.innerHTML = origInnerHTML;
-  //     button.disabled = false;
+  // const reservations = (event) => {
+  //   for (const rsvp of RSVPs) {
+  //     event.currentTarget.insertAdjacentHTML(
+  //       'afterend',
+  //       `<p className="rsvp">${rsvp} made a reservation for the event.</p>`
+  //     );
+  //     // sleep(5000);
+  //     // event.currentTarget.adjacentHTML.remove()
+  //     // = `<p className="rsvp">See Reservations</p>`
   //   }
+  // };
+
+  async function copyToClipboard(button) {
+    navigator.clipboard.writeText(ctcInfoStr);
+    const origInnerHTML = button.innerHTML;
+    button.innerHTML = 'Copied!';
+    button.disabled = true;
+    await sleep(1000);
+    button.innerHTML = origInnerHTML;
+    button.disabled = false;
+  }
 
   async function deploy() {
     try {
@@ -106,16 +109,12 @@ export default function User() {
           console.log(` ${stdlib.formatAddress(who)} has upgraded to Gold`);
           setGold(stdlib.formatAddress(who));
         },
-
-        seeVipUpgrade: (who) => {
-          console.log(` ${stdlib.formatAddress(who)} has upgraded to VIP`);
-          setVip(stdlib.formatAddress(who));
-        },
       };
       backend.Admin(ctc, interact);
       const ctcInfoStr = JSON.stringify(await ctc.getInfo(), null, 2);
       console.log(`Your contract is deployed as = ${ctcInfoStr}`);
-      // setCtcInfoStr(ctcInfoStr);
+      console.log(localStorage.getItem('info'));
+      setCtcInfoStr(localStorage.getItem('info'));
     } catch (err) {
       console.log(err);
     }
@@ -129,6 +128,20 @@ export default function User() {
             Customers Realtime Notifications
           </Typography>
         </Stack>
+        <h4 className="text-center card-plain">Copy your Event Information</h4>
+        <textarea value={ctcInfoStr} className="textarea" />
+        <button
+          className="btn-wrapper mt-3 mr-3 mb-3 btn-simple btn-success"
+          onClick={(e) => copyToClipboard(e.currentTarget)}
+        >
+          Copy to clipboard
+        </button>
+        {/* <button className="btn-wrapper mt-3 mb-3 btn-simple btn-success" onClick={reservations}>
+          See Reservations
+        </button>
+        <button className="btn-wrapper mt-3 mb-3 btn-simple btn-success" onClick={checkins}>
+          See Checkins
+        </button> */}
         <p>{customer} has enrolled</p>
         <p>{referral} referred a friend</p>
         <p>{read} has read the blog post</p>
@@ -137,7 +150,6 @@ export default function User() {
         <p>{bronze} has upgraded to Bronze</p>
         <p>{silver} has upgraded to Silver</p>
         <p>{gold} has upgraded to Gold</p>
-        <p>{vip} has upgraded to VIP</p>
         <Card />
       </Container>
     </Page>

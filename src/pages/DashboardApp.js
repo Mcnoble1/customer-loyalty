@@ -32,7 +32,7 @@ export default function DashboardApp() {
       return bal;
     };
 
-    const bal = await logBalance(acc, { _hex: '0x071ef956', _isBigNumber: true });
+    const bal = await logBalance(acc, { _hex: '0x072b9b07', _isBigNumber: true });
   };
 
   showBalance();
