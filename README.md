@@ -35,6 +35,7 @@ I hope to continue working on this project and fully implement all features so a
 
 
 ## Demo video
+[LOYCUS](https://www.youtube.com/watch?v=AzNZePCDE0U)
 
 
 
